@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Top Two Security Company</title>
+    <link rel="stylesheet" href="style.css" />
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-title">
+            <img src="img/logo.jpg width="200" height="150" alt="Logo" class="inline-logo" />
+            <h1>Top Two Security Company (pty)Ltd</h1>
+        </div>
+        <nav class="navbar">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#Apply">Apply</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>We Secure. We Protect. We Serve.</h2>
+        <p>24/7 Armed Security – Patrol, Guarding & Full Protection Services</p>
+        <button onclick="alert('Quote requested!')">Request a Quote</button>
+    </section>
+
+    <section id="services" class="services" data-aos="fade-up">
+        <h2><i class="fas fa-user-shield"></i> Our Services</h2>
+        <ul>
+            <li><i class="fas fa-car"></i> Armed Patrols – Fast, mobile response units</li>
+            <li><i class="fas fa-user-lock"></i> 24-Hour On-Site Security Guards</li>
+            <li><i class="fas fa-shield-alt"></i> Trained & Licensed Armed Protection</li>
+            <li><i class="fas fa-building"></i> Commercial & Residential Security Coverage</li>
+        </ul>
+    </section>
+
+    <section id="about" class="about" data-aos="fade-right">
+        <h2><i class="fas fa-users"></i> About Us</h2>
+        <p>Top Two Security Company has been protecting Eswatini's communities and businesses with trusted, highly trained, and fully armed professionals. Your safety is our highest priority.</p>
+    </section>
+
+    <section id="contact" class="contact" data-aos="fade-left">
+        <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+        <form onsubmit="event.preventDefault(); alert('Message sent!')">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p>Email: <a href="mailto:toptwosecurity@gmail.com">toptwosecurity@gmail.com</a></p>
+        <p>Call: <a href="tel:+26876072393">+268 76072393</a></p>
+    </section>
+
+    <section class="gallery" id="gallery" data-aos="zoom-in">
+        <h2><i class="fas fa-camera"></i> Our Team in Action</h2>
+        <div class="gallery-images">
+            <img src="C:/Users/Luncedvo Sacolo/Desktop//top_two_security_website/img/patrol.jpeg.jpeg" width="275" height="183" alt="Security Team">
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials" data-aos="fade-up">
+        <h2><i class="fas fa-comment-dots"></i> What Our Clients Say</h2>
+        <div class="testimonial-carousel">
+            <div class="testimonial active">
+                <p>"Top Two Security Company is reliable and professional. Highly recommended!"</p>
+                <h4>- Mr. Dlamini</h4>
+            </div>
+            <div class="testimonial">
+                <p>"Their 24/7 patrols gave us complete peace of mind."</p>
+                <h4>- Mrs. Nkosi</h4>
+            </div>
+            <div class="testimonial">
+                <p>"The guards are well-trained and courteous. Outstanding service."</p>
+                <h4>- Mr. Mthembu</h4>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="Apply" class="Apply" data-aos="fade-right">
+        <h2><i class="fas fa-shield-alt"></i> Apply Now</h2>
+        <form onsubmit="event.preventDefault(); showModal()">
+            <button type="submit">Apply</button>
+        </form>
+    </section>
+
+
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Application Closed</h3>
+            <p>
+                Sorry! We currently don’t accept any applications.<br>
+                Please come back later. Have a great day!
+            </p>
+        </div>
+    </div>
+
+    <a href="https://wa.me/26876072393" target="_blank" class="whatsapp-chat">Catch us on WhatsApp</a>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
+
+    <script>
+        function showModal() {
+            document.getElementById("applyModal").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("applyModal").style.display = "none";
+        }
+        window.onclick = function (event) {
+            const modal = document.getElementById("applyModal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+    </script>
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
+
+
+
+    <script>
+        let testimonialIndex = 0;
+        const testimonials = document.querySelectorAll('.testimonial');
+
+        function showNextTestimonial() {
+            testimonials[testimonialIndex].classList.remove('active');
+            testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+            testimonials[testimonialIndex].classList.add('active');
+        }
+
+        setInterval(showNextTestimonial, 4000); 
+    </script>
+
+
+</body>
+</html>
