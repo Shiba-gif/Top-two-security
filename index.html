@@ -5,17 +5,285 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Top Two Security Company</title>
     <link rel="stylesheet" href="style.css" />
-
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Added styles for login modal & small tweaks (you can move to style.css if you prefer) -->
+    <style>
+        /* --- Login modal & small UI styles --- */
+        :root {
+            --neon: #00ffd5;
+            --neon-dark: #00b89a;
+            --glass: rgba(255,255,255,0.03);
+        }
+
+        /* make sure video covers behind everything */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            object-fit: cover;
+            filter: brightness(0.55) contrast(1.05);
+        }
+
+        header {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 6%;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .logo-title {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .inline-logo {
+            width: 120px;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 4;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+            .nav-links a {
+                color: #dff7f0;
+                text-decoration: none;
+                font-weight: 600;
+                padding: 8px 10px;
+                border-radius: 6px;
+                transition: background .18s;
+            }
+
+                .nav-links a:hover {
+                    background: rgba(255,255,255,0.03);
+                }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            color: #dff7f0;
+        }
+
+        @media(max-width:900px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: absolute;
+                right: 6%;
+                top: 64px;
+                background: rgba(2,10,18,0.6);
+                backdrop-filter: blur(6px);
+                padding: 12px;
+                border-radius: 8px;
+                display: none;
+                flex-direction: column;
+            }
+
+                .nav-links.active {
+                    display: flex;
+                }
+        }
+
+        .hero, .services, .about, .gallery, .testimonials, .contact {
+            position: relative;
+            z-index: 2;
+            padding: 48px 6%;
+            color: #e6f7ff;
+        }
+
+        .cta {
+            background: linear-gradient(90deg,var(--neon),var(--neon-dark));
+            color: #002a25;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        /* ------------ Login Modal Styles ------------ */
+        .modal-login {
+            display: none; /* hidden by default */
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.6);
+            padding: 20px;
+        }
+
+            .modal-login.active {
+                display: flex;
+            }
+
+        .login-panel {
+            width: 420px;
+            max-width: 95%;
+            background: linear-gradient(180deg, rgba(8,12,16,0.9), rgba(6,8,12,0.85));
+            border: 1px solid rgba(0,255,213,0.08);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            padding: 24px;
+            border-radius: 12px;
+            color: #e6f7ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .login-panel::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                background: linear-gradient(120deg, rgba(0,255,213,0.02), rgba(0,184,154,0.01));
+            }
+
+            .login-panel h3 {
+                margin: 0 0 12px 0;
+                color: var(--neon);
+                font-size: 1.25rem;
+            }
+
+        .login-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+            .login-row .icon {
+                width: 44px;
+                height: 44px;
+                background: var(--glass);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--neon);
+                font-size: 1.1rem;
+            }
+
+        .login-form label {
+            display: block;
+            font-weight: 600;
+            color: #cfeee8;
+            margin-bottom: 6px;
+        }
+
+        .login-form input[type="email"], .login-form input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.35);
+            color: #e6f7ff;
+            outline: none;
+            margin-bottom: 12px;
+            transition: box-shadow .15s, border-color .15s;
+        }
+
+        .login-form input:focus {
+            box-shadow: 0 8px 30px rgba(0,255,213,0.06);
+            border-color: var(--neon);
+        }
+
+        .login-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+        }
+
+        .btn-login {
+            background: linear-gradient(90deg,var(--neon),var(--neon-dark));
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: #002a25;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 28px rgba(0,255,213,0.08);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #dff7f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #bdeee3;
+            font-size: 1.15rem;
+            cursor: pointer;
+        }
+
+        .login-form .small {
+            font-size: 0.88rem;
+            color: #bfeee6;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .login-form .small input[type="checkbox"] {
+                transform: translateY(1px);
+            }
+
+       
+        @media(max-width:420px) {
+            .login-panel {
+                padding: 16px;
+            }
+
+            .login-form input {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="img/Rotating_Glow_Light_Beam_Neon_Light_Tunnel_VJ_Loop(1080p).mp4" type="video/mp4">
+    </video>
+
     <header>
         <div class="logo-title">
-            <img src="img/logo.jpg width="200" height="150" alt="Logo" class="inline-logo" />
-            <h1>Top Two Security Company (pty)Ltd</h1>
+            <img src="img/logo.jpg" width="120" height="90" alt="Logo" class="inline-logo" />
+            <h1>Top Two Security Company (pty) Ltd</h1>
         </div>
         <nav class="navbar">
             <div class="menu-toggle" onclick="toggleMenu()">
@@ -27,6 +295,8 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#Apply">Apply</a></li>
+                
+                <li><a href="#" onclick="openLogin(event)"><i class="fas fa-user-lock"></i> Login</a></li>
             </ul>
         </nav>
     </header>
@@ -52,6 +322,48 @@
         <p>Top Two Security Company has been protecting Eswatini's communities and businesses with trusted, highly trained, and fully armed professionals. Your safety is our highest priority.</p>
     </section>
 
+    
+    <section class="services" data-aos="fade-up">
+        <h2><i class="fas fa-user-shield"></i> More Services</h2>
+        <ul>
+            <li><i class="fas fa-video"></i> CCTV Monitoring & Installation</li>
+            <li><i class="fas fa-bell"></i> Alarm Response Services</li>
+            <li><i class="fas fa-dog"></i> K9 Security Units</li>
+            <li><i class="fas fa-handshake"></i> Event Security Management</li>
+        </ul>
+    </section>
+
+    <section class="about" data-aos="fade-left">
+        <h2><i class="fas fa-info-circle"></i> Our Mission</h2>
+        <p>Our mission is to provide unparalleled security solutions, ensuring peace of mind for our clients through dedication, professionalism, and advanced security techniques. We are committed to fostering a safe environment for everyone.</p>
+    </section>
+
+    <section class="gallery" data-aos="zoom-in">
+        <h2><i class="fas fa-camera"></i> More of Our Team</h2>
+        <div class="gallery-images">
+            <img src="img/Image_004.png" width="275" alt="Security Team 2">
+            <img src="img/Image_007.png"  alt="Security Team 3">
+        </div>
+    </section>
+
+    <section class="testimonials" data-aos="fade-up">
+        <h2><i class="fas fa-comment-dots"></i> More Client Testimonials</h2>
+        <div class="testimonial-carousel">
+            <div class="testimonial active">
+                <p>"Their rapid response time is truly impressive. Highly recommend their patrol services!"</p>
+                <h4>- Mr. Nxumalo</h4>
+            </div>
+            <div class="testimonial">
+                <p>"Top Two Security provided excellent security for our commercial property. Very professional."</p>
+                <h4>- Ms. Sibiya</h4>
+            </div>
+            <div class="testimonial">
+                <p>"Feeling much safer with Top Two Security guarding our neighborhood. Fantastic job!"</p>
+                <h4>- Mr. Vilakazi</h4>
+            </div>
+        </div>
+    </section>
+
     <section id="contact" class="contact" data-aos="fade-left">
         <h2><i class="fas fa-envelope"></i> Contact Us</h2>
         <form onsubmit="event.preventDefault(); alert('Message sent!')">
@@ -67,7 +379,12 @@
     <section class="gallery" id="gallery" data-aos="zoom-in">
         <h2><i class="fas fa-camera"></i> Our Team in Action</h2>
         <div class="gallery-images">
-            <img src="C:/Users/Luncedvo Sacolo/Desktop//top_two_security_website/img/patrol.jpeg.jpeg" width="275" height="183" alt="Security Team">
+            <img src="img/Image_005.png" width="275" height="183" alt="Security Team">
+            <img src="img/Image_006.png" width="275" height="183" alt="Security Team">
+            <img src="img/Image_009.png" width="275" height="183" alt="Security Team">
+            <img src="img/Image_002.png" width="275" height="183" alt="Security Team">
+
+
         </div>
     </section>
 
@@ -89,7 +406,6 @@
         </div>
     </section>
 
-
     <section id="Apply" class="Apply" data-aos="fade-right">
         <h2><i class="fas fa-shield-alt"></i> Apply Now</h2>
         <form onsubmit="event.preventDefault(); showModal()">
@@ -97,7 +413,7 @@
         </form>
     </section>
 
-
+    
     <div id="applyModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -109,13 +425,92 @@
         </div>
     </div>
 
-    <a href="https://wa.me/26876072393" target="_blank" class="whatsapp-chat">Catch us on WhatsApp</a>
+   
+    <div id="loginModal" class="modal-login" aria-hidden="true" role="dialog" aria-labelledby="loginTitle">
+        <div class="login-panel" role="document">
+            <button class="close-btn" aria-label="Close login" onclick="closeLogin()">&times;</button>
+            <div class="login-row" style="margin-bottom:8px;">
+                <div class="icon"><i class="fas fa-user-shield"></i></div>
+                <div>
+                    <h3 id="loginTitle">Agent Portal Login</h3>
+                    <div style="color:#bfeee6;font-size:0.9rem">Authorized personnel only — sign in to access dispatcher tools.</div>
+                </div>
+            </div>
+
+            <form id="loginForm" class="login-form" onsubmit="submitLogin(event)">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" type="email" placeholder="toptwo@....com" required>
+
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" placeholder="Enter your password" required>
+
+                <div class="login-actions">
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <label style="display:flex;align-items:center;gap:8px;color:#bfeee6;">
+                            <input type="checkbox" id="rememberMe"> Remember
+                        </label>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button type="button" class="btn-secondary" onclick="forgotPassword()">Forgot?</button>
+                        <button type="submit" class="btn-login">Sign In</button>
+                    </div>
+                </div>
+
+                <div class="small" style="margin-top:12px;">
+                    <i class="fas fa-lock"></i>
+                    <span>We protect your info — your information is well protected.</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <a href="https://wa.me/26876072393" target="_blank" class="whatsapp-chat" style="position:fixed;right:18px;bottom:18px;z-index:9999;background:#25D366;padding:12px 14px;border-radius:50px;color:#002a25;text-decoration:none;font-weight:700;">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>AOS.init({ duration: 1000, once: true });</script>
 
     <script>
+       
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        function openLogin(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('loginModal').setAttribute('aria-hidden', 'false');
+            
+            setTimeout(() => document.getElementById('loginEmail').focus(), 120);
+        }
+        function closeLogin() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('loginModal').setAttribute('aria-hidden', 'true');
+        }
+
+       
+        window.addEventListener('click', function (evt) {
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal.classList.contains('active') && evt.target === loginModal) closeLogin();
+        });
+
+        
+        function submitLogin(shiba) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            
+            alert('Welcome, ' + email + ' — (demo signin).');
+            closeLogin();
+        }
+
+        
+        function forgotPassword() {
+            alert('To reset password, contact admin@toptwosecurity..');
+        }
+
+        
         function showModal() {
             document.getElementById("applyModal").style.display = "flex";
         }
@@ -129,28 +524,16 @@
             }
         };
 
-    </script>
-    <script>
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-    </script>
-
-
-
-    <script>
+       
         let testimonialIndex = 0;
         const testimonials = document.querySelectorAll('.testimonial');
-
         function showNextTestimonial() {
+            if (!testimonials.length) return;
             testimonials[testimonialIndex].classList.remove('active');
             testimonialIndex = (testimonialIndex + 1) % testimonials.length;
             testimonials[testimonialIndex].classList.add('active');
         }
-
-        setInterval(showNextTestimonial, 4000); 
+        setInterval(showNextTestimonial, 4000);
     </script>
-
-
 </body>
 </html>
